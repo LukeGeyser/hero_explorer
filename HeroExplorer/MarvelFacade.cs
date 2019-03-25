@@ -138,7 +138,7 @@ namespace HeroExplorer
         private static string CreateHash(string timeStamp)
         {
             var toBeHashed = timeStamp + PrivateKey + PublicKey;
-            var hashedMessage = ComputeMD5(toBeHashed);
+            var hashedMessage = ComputeMD5(toBeHashed);          
             return hashedMessage;
         }
 

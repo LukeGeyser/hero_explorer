@@ -32,8 +32,7 @@ namespace HeroExplorer
 
         public MainPage()
         {
-            this.InitializeComponent();
-
+            this.InitializeComponent();          
             MarvelCharacters = new ObservableCollection<Character>();
             MarvelComics = new ObservableCollection<ComicBook>();
         }
