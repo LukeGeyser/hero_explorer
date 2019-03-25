@@ -36,8 +36,7 @@ namespace HeroExplorer
                     if (character.thumbnail != null
                         && character.thumbnail.path != ""
                         && character.thumbnail.path != ImageNotAvailablePath)
-                    {
-
+                    {           
                         character.thumbnail.small = String.Format("{0}/standard_small.{1}",
                             character.thumbnail.path,
                             character.thumbnail.extension);
