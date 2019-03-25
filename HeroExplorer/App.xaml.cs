@@ -96,5 +96,29 @@ namespace HeroExplorer
             //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
+
+        protected override void OnActivated(IActivatedEventArgs e)
+        {
+            // Was the app activated by a voice command?
+            if (e.Kind != Windows.ApplicationModel.Activation.ActivationKind.VoiceCommand)
+            {
+                return;
+            }
+
+            var commandArgs = e as Windows.ApplicationModel.Activation.VoiceCommandActivatedEventArgs;
+
+            var speechRecognitionResult = commandArgs.Result;
+            string voiceCommandName = speechRecognitionResult.RulePath[0];
+
+            Frame rootFrame = Window.Current.Content as Frame;
+            MainPage page = rootFrame.Content as MainPage;
+            if (page == null)
+                return;
+
+            if (voiceCommandName == "refresh")
+                page.Refresh();
+
+        }
+
     }
 }
