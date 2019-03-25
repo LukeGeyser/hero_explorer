@@ -110,7 +110,7 @@ namespace HeroExplorer
 
         private static async Task<ComicDataWrapper> GetComicDataWrapperAsync(int characterID)
         {
-            var url = String.Format("https://gateway.marvel.com:443/v1/public/comics?characters={0}&limit=10",
+            var url = String.Format("https://gateway.marvel.com:443/v1/public/comics?characters={0}",
                 characterID);
             var jsonMessage = await CallMarvelAsync(url);
 
