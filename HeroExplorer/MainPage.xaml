@@ -91,8 +91,8 @@
 
                     <!-- CHARACTER DETAIL -->
                     <Grid Grid.Row="0" 
-                  HorizontalAlignment="Left" 
-                  VerticalAlignment="Top">
+                          HorizontalAlignment="Left" 
+                          VerticalAlignment="Top">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -103,9 +103,9 @@
                         </Grid.ColumnDefinitions>
 
                         <Image Name="DetailImage" 
-                       Grid.Column="0" 
-                       Grid.RowSpan="2" 
-                       VerticalAlignment="Top"/>
+                               Grid.Column="0" 
+                               Grid.RowSpan="2" 
+                               VerticalAlignment="Top"/>
                         <TextBlock Name="DetailNameTextBlock" 
                            FontSize="32" 
                            Grid.Column="1" 
@@ -163,19 +163,20 @@
 
                 </Grid>
 
+                <!-- FOOTER -->
                 <TextBlock Name="MarvelCopywrite"
                            VerticalAlignment="Center" 
                            HorizontalAlignment="Center" 
                            Grid.ColumnSpan="2"
-                           Grid.Row="2"/>
-
+                           Grid.Row="2" />
+                
                 <ProgressRing Name="MyProgressRing"
                               Width="100"
                               Height="100"                               
                               Grid.ColumnSpan="2"
                               Grid.RowSpan="3" 
                               VerticalAlignment="Center"
-                              HorizontalAlignment="Center"/>
+                              HorizontalAlignment="Center" />
 
             </Grid>
         </ScrollViewer>

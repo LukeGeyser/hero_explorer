@@ -21,12 +21,19 @@ namespace HeroExplorer
         private const int MaxCharacters = 1500;
         private const string ImageNotAvailablePath = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available";
 
+        public static async Task<string> GetAttributionTextAsync()
+        {
+            var charactersDataWrapper = await GetCharacterDataWrapperAsync();
+
+            return charactersDataWrapper.attributionText;
+        }
+
         public static async Task PopulateMarvelCharactersAsync(ObservableCollection<Character> marvelCharacters)
         {
             try
             {
                 var charactersDataWrapper = await GetCharacterDataWrapperAsync();
-
+                
                 var characters = charactersDataWrapper.data.results;
 
                 foreach (var character in characters)
@@ -138,7 +145,7 @@ namespace HeroExplorer
         private static string CreateHash(string timeStamp)
         {
             var toBeHashed = timeStamp + PrivateKey + PublicKey;
-            var hashedMessage = ComputeMD5(toBeHashed);          
+            var hashedMessage = ComputeMD5(toBeHashed);        
             return hashedMessage;
         }
 

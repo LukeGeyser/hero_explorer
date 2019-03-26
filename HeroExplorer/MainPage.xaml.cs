@@ -43,7 +43,7 @@ namespace HeroExplorer
             //    new Uri("ms-appx:///VoiceCommandDictionary.xml"));
             //await Windows.ApplicationModel.VoiceCommands.VoiceCommandDefinitionManager
             //    .InstallCommandDefinitionsFromStorageFileAsync(storageFile);
-
+            MarvelCopywrite.Text = await MarvelFacade.GetAttributionTextAsync();
             Refresh();
         }
 
@@ -54,7 +54,7 @@ namespace HeroExplorer
 
             MarvelCharacters.Clear();
             while (MarvelCharacters.Count < 10)
-            {
+            {                
                 Task t = MarvelFacade.PopulateMarvelCharactersAsync(MarvelCharacters);
                 await t;
             }
