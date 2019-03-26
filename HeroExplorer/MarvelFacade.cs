@@ -16,7 +16,6 @@ namespace HeroExplorer
 {
     public class MarvelFacade
     {
-        
         private const string PrivateKey = "e1164b4638eb8907c38f114f9b913664694e0393";
         private const string PublicKey = "a466539520714fa01f97d14b4e779785";
         private const int MaxCharacters = 1500;
@@ -102,7 +101,7 @@ namespace HeroExplorer
         {
             // Assemble The Url
             Random random = new Random();
-            var offset = random.Next(1500);
+            var offset = random.Next(MaxCharacters);
             string url = String.Format("http://gateway.marvel.com:80/v1/public/characters?limit=10&offset={0}", offset);
 
             var jsonMessage = await CallMarvelAsync(url);
