@@ -16,6 +16,7 @@ namespace HeroExplorer
 {
     public class MarvelFacade
     {
+        
         private const string PrivateKey = "e1164b4638eb8907c38f114f9b913664694e0393";
         private const string PublicKey = "a466539520714fa01f97d14b4e779785";
         private const int MaxCharacters = 1500;
@@ -24,7 +25,7 @@ namespace HeroExplorer
         public static async Task<string> GetAttributionTextAsync()
         {
             var charactersDataWrapper = await GetCharacterDataWrapperAsync();
-
+            var hello = 0;
             return charactersDataWrapper.attributionText;
         }
 
