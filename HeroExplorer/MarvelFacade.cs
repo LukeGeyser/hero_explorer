@@ -25,7 +25,7 @@ namespace HeroExplorer
         public static async Task<string> GetAttributionTextAsync()
         {
             var charactersDataWrapper = await GetCharacterDataWrapperAsync();
-            var hello = 0;
+
             return charactersDataWrapper.attributionText;
         }
 
