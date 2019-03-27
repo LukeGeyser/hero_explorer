@@ -42,6 +42,7 @@ namespace HeroExplorer
             TotalSuggestions = new List<string>();
             CharacterText.Visibility = Visibility.Collapsed;
             SearchAutoSuggestBox.Visibility = Visibility.Collapsed;
+            BackButton.Visibility = Visibility.Collapsed;
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -51,7 +52,7 @@ namespace HeroExplorer
             //await Windows.ApplicationModel.VoiceCommands.VoiceCommandDefinitionManager
             //    .InstallCommandDefinitionsFromStorageFileAsync(storageFile);
             MarvelCopywrite.Text = await MarvelFacade.GetAttributionTextAsync();
-            Refresh();
+            Refresh();            
         }
 
         public async void Refresh()
@@ -167,23 +168,42 @@ namespace HeroExplorer
 
             await MarvelFacade.PopulateSearchedMarvilCharacterAsync(sender.Text, searchedMarvelCharacters);
 
+            BackButton.Visibility = Visibility.Visible;
             MasterListView.ItemsSource = searchedMarvelCharacters;
 
             if (searchedMarvelCharacters.Count == 0)
             {                
                 CharacterText.Text = "CHARACTER NOT FOUND!";
                 CharactersText.Text = "";
+                BackButton.Visibility = Visibility.Collapsed;
             }
             else
             {
                 CharacterText.Text = "";
                 CharactersText.Text = "Characters";
-            }
-            
+            }            
 
             MyProgressRing.IsActive = false;
             MyProgressRing.Visibility = Visibility.Collapsed;
 
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            DetailNameTextBlock.Text = "";
+            DetailDescriptionTextBlock.Text = "";
+            DetailImage.Source = null;
+            ComicsGridView.ItemsSource = null;
+
+            ComicDetailDescriptionTextBlock.Text = "";
+            ComicDetailNameTextBlock.Text = "";
+            ComicDetailImage.Source = null;
+
+            CharacterText.Text = "";
+            CharactersText.Text = "Characters";
+            MasterListView.ItemsSource = MarvelCharacters;
+            
+            BackButton.Visibility = Visibility.Collapsed;
         }
     }
 }
