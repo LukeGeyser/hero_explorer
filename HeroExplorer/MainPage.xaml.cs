@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -28,13 +29,19 @@ namespace HeroExplorer
     {
         public ObservableCollection<Character> MarvelCharacters { get; set; }
         public ObservableCollection<ComicBook> MarvelComics { get; set; }
-
+        public ObservableCollection<Character> searchedMarvelCharacters { get; set; }
+        private List<string> TotalSuggestions;
+        private List<string> ChangingSuggestions;
 
         public MainPage()
         {
             this.InitializeComponent();          
             MarvelCharacters = new ObservableCollection<Character>();
             MarvelComics = new ObservableCollection<ComicBook>();
+            searchedMarvelCharacters = new ObservableCollection<Character>();
+            TotalSuggestions = new List<string>();
+            CharacterText.Visibility = Visibility.Collapsed;
+            SearchAutoSuggestBox.Visibility = Visibility.Collapsed;
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -59,8 +66,13 @@ namespace HeroExplorer
                 await t;
             }
 
+            CharactersText.Text = "Characters";
+            MasterListView.ItemsSource = MarvelCharacters;
+
             MyProgressRing.IsActive = false;
             MyProgressRing.Visibility = Visibility.Collapsed;
+            
+            SearchAutoSuggestBox.Visibility = Visibility.Visible;
         }
 
         private async void MasterListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -84,9 +96,14 @@ namespace HeroExplorer
 
             MarvelComics.Clear();
 
+            CharacterText.Text = "Charcacter Details";
+            CharacterText.Visibility = Visibility.Visible;
+
             await MarvelFacade.PopulateMarvelComicsAsync(
                 selectedCharacter.id,
                 MarvelComics);
+
+            ComicsGridView.ItemsSource = MarvelComics;           
 
             MyProgressRing.IsActive = false;
             MyProgressRing.Visibility = Visibility.Collapsed;
@@ -106,6 +123,67 @@ namespace HeroExplorer
             Uri uri = new Uri(selectedComic.thumbnail.large, UriKind.Absolute);
             largeImage.UriSource = uri;
             ComicDetailImage.Source = largeImage;
+        }
+
+        private void SearchAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            ChangingSuggestions = TotalSuggestions.Where(p => p.StartsWith(sender.Text)).ToList();
+            SearchAutoSuggestBox.ItemsSource = ChangingSuggestions.Reverse<string>();
+        }
+
+        private async void SearchAutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            var isFound = false;
+
+            if (TotalSuggestions.Count > 0)
+            {
+                foreach (var suggestion in TotalSuggestions)
+                {
+                    if (suggestion == sender.Text)
+                    {
+                        isFound = true;
+                    }
+                }
+            }
+
+            if (isFound == false)
+            {
+                TotalSuggestions.Add(sender.Text);
+            }
+
+            MyProgressRing.IsActive = true;
+            MyProgressRing.Visibility = Visibility.Visible;
+
+            searchedMarvelCharacters.Clear();
+
+            DetailNameTextBlock.Text = "";
+            DetailDescriptionTextBlock.Text = "";
+            DetailImage.Source = null;
+            ComicsGridView.ItemsSource = null;
+
+            ComicDetailDescriptionTextBlock.Text = "";
+            ComicDetailNameTextBlock.Text = "";
+            ComicDetailImage.Source = null;
+
+            await MarvelFacade.PopulateSearchedMarvilCharacterAsync(sender.Text, searchedMarvelCharacters);
+
+            MasterListView.ItemsSource = searchedMarvelCharacters;
+
+            if (searchedMarvelCharacters.Count == 0)
+            {                
+                CharacterText.Text = "CHARACTER NOT FOUND!";
+                CharactersText.Text = "";
+            }
+            else
+            {
+                CharacterText.Text = "";
+                CharactersText.Text = "Characters";
+            }
+            
+
+            MyProgressRing.IsActive = false;
+            MyProgressRing.Visibility = Visibility.Collapsed;
+
         }
     }
 }

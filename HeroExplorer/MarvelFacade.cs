@@ -97,6 +97,57 @@ namespace HeroExplorer
             }
         }
 
+        public static async Task PopulateSearchedMarvilCharacterAsync(string characterNameStartsWith, ObservableCollection<Character> searchedMarvelCharacters)
+        {
+            try
+            {
+                var charactersDataWrapper = await GetSearchedCharacterAsync(characterNameStartsWith);
+
+                var searchedCharacters = charactersDataWrapper.data.results;
+
+                foreach (var character in searchedCharacters)
+                {
+                    // Filter Charcters that are missing thumbnail images
+
+                    if (character.thumbnail != null
+                        && character.thumbnail.path != ""
+                        && character.thumbnail.path != ImageNotAvailablePath)
+                    {
+                        character.thumbnail.small = String.Format("{0}/standard_small.{1}",
+                            character.thumbnail.path,
+                            character.thumbnail.extension);
+
+                        character.thumbnail.large = String.Format("{0}/portrait_xlarge.{1}",
+                            character.thumbnail.path,
+                            character.thumbnail.extension);
+
+                        searchedMarvelCharacters.Add(character);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+
+        private static async Task<CharacterDataWrapper> GetSearchedCharacterAsync(string characterNameStartsWith)
+        {
+            // Assemble The Url
+            Random random = new Random();
+            var offset = random.Next(MaxCharacters);
+            string url = String.Format("http://gateway.marvel.com:80/v1/public/characters?nameStartsWith={0}", characterNameStartsWith);
+
+            var jsonMessage = await CallMarvelAsync(url);
+
+            // Response -> string / json -> deserialize
+            var serializer = new DataContractJsonSerializer(typeof(CharacterDataWrapper));
+            var ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonMessage));
+
+            var result = (CharacterDataWrapper)serializer.ReadObject(ms);
+            return result;
+        }
+
         private static async Task<CharacterDataWrapper> GetCharacterDataWrapperAsync()
         {
             // Assemble The Url
