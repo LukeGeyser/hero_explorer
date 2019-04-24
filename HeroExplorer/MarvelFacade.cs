@@ -140,8 +140,6 @@ namespace HeroExplorer
 
             var jsonMessage = await CallMarvelAsync(url);
 
-            // Hello WOrld
-
             // Response -> string / json -> deserialize
             var serializer = new DataContractJsonSerializer(typeof(CharacterDataWrapper));
             var ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonMessage));
